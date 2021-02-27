@@ -33,5 +33,6 @@
         "titleBar.inactiveForeground": "#e7e7e799"
     },
     "python.pythonPath": "c:\\Users\\akalo\\.virtualenvs\\books-HQHbbrnA\\Scripts\\python.exe",
-    "peacock.color": "#0f1743"
+    "peacock.color": "#0f1743",
+    "activestate.promptRuntimeCreation": false
 }
