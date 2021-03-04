@@ -196,4 +196,6 @@ DEFAULT_FROM_EMAIL = 'admin@djangobookstore.com'
 
 TEMPLATE_DEBUG = True
 
+MEDIA_URL = '/media/' # new
+MEDIA_ROOT = str(BASE_DIR.joinpath('media')) # new
 
