@@ -45,12 +45,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
 
-    # third perty
+    # third party
     'crispy_forms',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.github',
+    # 'template_debug',
 
     #local
     'accounts',
@@ -192,4 +193,7 @@ ACCOUNT_EMAIL_REQUIRED = True  # new
 ACCOUNT_UNIQUE_EMAIL = True  # new
 
 DEFAULT_FROM_EMAIL = 'admin@djangobookstore.com'
+
+TEMPLATE_DEBUG = True
+
 

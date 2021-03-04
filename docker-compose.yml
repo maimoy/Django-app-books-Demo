@@ -8,11 +8,13 @@ services:
       - .:/code
     ports:
       - 8000:8000
+      - 3000:3000
     depends_on:
       - db
     environment:
       - "DJANGO_SECRET_KEY=9j2p-v+e(wl7&de+3(73*$$z0fv_&0_(7$$-95(^obmd4v#mb_u3"
       - "DJANGO_DEBUG=True"
+      - "VSCODE_DEBUGGER=True"
 
   db:
     image: postgres:11
