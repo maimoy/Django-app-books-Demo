@@ -12,6 +12,7 @@ environs = {extras = ["django"], version = "*"}
 ptvsd = "*"
 django-template-debug = "*"
 pillow = "*"
+django-debug-toolbar = "*"
 
 [dev-packages]
 pycodestyle = "*"
