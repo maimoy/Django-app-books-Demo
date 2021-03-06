@@ -7,15 +7,9 @@
 
 {% block content %}
     <h1>Homepage</h1>
-    <img class="bookcover" src="{% static 'images/dfp_cover_31.png' %}">
-    {% if user.is_authenticated %}
-        Hi {{ user.email }}!
-        <p><a href="{% url 'account_logout' %}">Log Out</a></p>
-    {% else %}
-        <p>You are not logged in</p>
-        <a href="{% provider_login_url 'github' %}">Log In</a>
-        <a href="{% url 'account_signup' %}">Sign Up</a>
-    {% endif %}
+    <form class="form-inline mt-2 mt-md-0" action="{% url 'search_results' %}" method="get">
+        <input name="q" class="form-control mr-sm-2" type="text" placeholder aria-label="Search">
+    </form>
     {% get_providers as socialaccount_providers %}
     
     {% for provider in socialaccount_providers %}
