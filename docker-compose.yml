@@ -3,18 +3,25 @@ version: '3.8'
 services:
   web:
     build: .
-    command: python /code/manage.py runserver 0.0.0.0:8000
+    command: tail -f /dev/null
     volumes:
       - .:/code
     ports:
-      - 8000:8000
       - 3000:3000
+      - 8000:8000
+      - 8010:8010
     depends_on:
       - db
     environment:
       - "DJANGO_SECRET_KEY=9j2p-v+e(wl7&de+3(73*$$z0fv_&0_(7$$-95(^obmd4v#mb_u3"
       - "DJANGO_DEBUG=True"
       - "VSCODE_DEBUGGER=True"
+      - "DJANGO_SECURE_SSL_REDIRECT=False"
+      - "DJANGO_SECURE_HSTS_SECONDS=0"
+      - "DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS=False"
+      - "DJANGO_SECURE_HSTS_PRELOAD=False"
+      - "DJANGO_SESSION_COOKIE_SECURE=False"
+      - "DJANGO_CSRF_COOKIE_SECURE=False"
 
   db:
     image: postgres:11

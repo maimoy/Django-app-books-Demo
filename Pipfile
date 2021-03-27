@@ -13,6 +13,10 @@ ptvsd = "*"
 django-template-debug = "*"
 pillow = "*"
 django-debug-toolbar = "*"
+django-extensions = "*"
+werkzeug = "*"
+pyopenssl = "*"
+uwsgi = "*"
 
 [dev-packages]
 pycodestyle = "*"

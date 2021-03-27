@@ -10,15 +10,24 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import socket
+import os
 from pathlib import Path
 from environs import Env
+from django.conf.urls.static import static
+import mimetypes
+
+# mimetypes.add_type("text/css", ".css", True)
+# mimetypes.add_type("text/html", ".html", True)
+# mimetypes.add_type("text/javascript", ".js", True)
+# mimetypes.add_type("text/script", ".js", True)
 
 env = Env()
 env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+print("BASE_DIR={}".format(BASE_DIR))
+PROJECT_ROOT = os.path.normpath(os.path.dirname(__file__))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -29,9 +38,10 @@ SECRET_KEY = env("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = True
-DEBUG = env.bool("DJANGO_DEBUG")
+DEBUG = False # env.bool("DJANGO_DEBUG", default=True)
+VSCODE_DEBUGGER = False # env.bool("VSCODE_DEBUGGER", default=True)
 
-ALLOWED_HOSTS = ['.herokuapp.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['.herokuapp.com', 'localhost', '127.0.0.1', '0.0.0.0']
 
 
 # Application definition
@@ -46,6 +56,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
 
     # third party
+    'django_extensions',
     'crispy_forms',
     'allauth',
     'allauth.account',
@@ -61,9 +72,8 @@ INSTALLED_APPS = [
 ]
 
 
-
 MIDDLEWARE = [
-    'django.middleware.cache.UpdateCacheMiddleware',
+    # 'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -72,12 +82,12 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
-    'django.middleware.cache.FetchFromCacheMiddleware',
+    # 'django.middleware.cache.FetchFromCacheMiddleware',
 ]
 
-CACHE_MIDDLEWARE_ALIAS = 'default'
-CACHE_MIDDLEWARE_SECONDS = 604800
-CACHE_MIDDLEWARE_KEY_PREFIX = ''
+# CACHE_MIDDLEWARE_ALIAS = 'default'
+# CACHE_MIDDLEWARE_SECONDS = 604800
+# CACHE_MIDDLEWARE_KEY_PREFIX = ''
 
 ROOT_URLCONF = 'config.urls'
 
@@ -165,8 +175,16 @@ AUTH_USER_MODEL = 'accounts.CustomUser'
 # LOGIN_REDIRECT_URL = 'home'
 # LOGOUT_REDIRECT_URL = 'home'
 
-STATICFILES_DIRS = (str(BASE_DIR.joinpath('static')),)
+STATICFILES_DIRS = [str(BASE_DIR / "static"),
+                    # os.path.join(BASE_DIR, "staticfiles"),
+                    # str(BASE_DIR.joinpath('static')),
+]                  
+# print("STATICFILES_DIRS={}".format(STATICFILES_DIRS))
 STATIC_ROOT = str(BASE_DIR.joinpath('staticfiles'))
+print("STATIC_ROOT={}".format(STATIC_ROOT))
+# STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
+# STATICFILES_STORAGE = STATIC_ROOT # Path(__file__).resolve().parent.parent
+# print("STATICFILES_STORAGE={}".format(STATICFILES_STORAGE))
 STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
@@ -204,9 +222,49 @@ DEFAULT_FROM_EMAIL = 'admin@djangobookstore.com'
 
 TEMPLATE_DEBUG = True
 
-MEDIA_URL = '/media/' # new
-MEDIA_ROOT = str(BASE_DIR.joinpath('media')) # new
+MEDIA_URL = '/media/'
+MEDIA_ROOT  = '/code/media' # str(BASE_DIR.joinpath('media'))
+print("MEDIA_ROOT={}".format(MEDIA_ROOT))
 
 # django-debug-toolbar
 hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
 INTERNAL_IPS = [ip[:-1] + "1" for ip in ips]
+
+
+SECURE_SSL_REDIRECT = True # env.bool("DJANGO_SECURE_SSL_REDIRECT", default=True)
+print("SECURE_SSL_REDIRECT={}".format(SECURE_SSL_REDIRECT))
+# SECURE_HSTS_SECONDS = 0
+# SECURE_HSTS_INCLUDE_SUBDOMAINS = False
+# SECURE_HSTS_PRELOAD = False
+
+SECURE_HSTS_SECONDS = env.int("DJANGO_SECURE_HSTS_SECONDS", default=2592000)
+SECURE_HSTS_INCLUDE_SUBDOMAINS=env.bool("DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS", default=True)
+SECURE_HSTS_PRELOAD = env.bool("DJANGO_SECURE_HSTS_PRELOAD", default=True)
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SESSION_COOKIE_SECURE = True #env.bool("DJANGO_SESSION_COOKIE_SECURE", default=True)
+CSRF_COOKIE_SECURE = True # env.bool("DJANGO_CSRF_COOKIE_SECURE", default=True)
+
+print("SESSION_COOKIE_SECURE={}".format(SESSION_COOKIE_SECURE))
+print("CSRF_COOKIE_SECURE={}".format(CSRF_COOKIE_SECURE))
+
+
+
+
+
+"""
+command to run uwsgi 
+
+uwsgi --http "0.0.0.0:8000" --module config.wsgi --master --processes 4 --threads 2 --static-map /static=/code/static --static-map /media=/code/media --offload-threads 2 --py-autoreload 10 --stats 127.0.0.1:8010
+
+uwsgi --socket "0.0.0.0:8000" --chdir /code/ --wsgi-file config/wsgi.py --master --processes 4 --threads 2 --static-map /static=/code/static --static-map /media=/code/media --offload-threads 2 --py-autoreload 10 --stats 127.0.0.1:8010
+
+
+
+
+
+
+openssl genrsa -out foobar.key 2048
+openssl req -new -key foobar.key -out foobar.csr
+openssl x509 -req -days 365 -in foobar.csr -signkey foobar.key -out foobar.crt
+
+"""
