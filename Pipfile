@@ -17,6 +17,7 @@ django-extensions = "*"
 werkzeug = "*"
 pyopenssl = "*"
 uwsgi = "*"
+django-uwsgi = "*"
 
 [dev-packages]
 pycodestyle = "*"

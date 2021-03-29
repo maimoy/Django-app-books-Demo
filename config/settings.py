@@ -41,7 +41,8 @@ SECRET_KEY = env("DJANGO_SECRET_KEY")
 DEBUG = False # env.bool("DJANGO_DEBUG", default=True)
 VSCODE_DEBUGGER = False # env.bool("VSCODE_DEBUGGER", default=True)
 
-ALLOWED_HOSTS = ['.herokuapp.com', 'localhost', '127.0.0.1', '0.0.0.0']
+ALLOWED_HOSTS = ['.herokuapp.com', 'localhost',
+                 'localhost:8000', '127.0.0.1', '0.0.0.0']
 
 
 # Application definition
@@ -223,7 +224,7 @@ DEFAULT_FROM_EMAIL = 'admin@djangobookstore.com'
 TEMPLATE_DEBUG = True
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT  = '/code/media' # str(BASE_DIR.joinpath('media'))
+MEDIA_ROOT  = '/code/media/covers' # str(BASE_DIR.joinpath('media'))
 print("MEDIA_ROOT={}".format(MEDIA_ROOT))
 
 # django-debug-toolbar
@@ -231,7 +232,7 @@ hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
 INTERNAL_IPS = [ip[:-1] + "1" for ip in ips]
 
 
-SECURE_SSL_REDIRECT = True # env.bool("DJANGO_SECURE_SSL_REDIRECT", default=True)
+SECURE_SSL_REDIRECT = True  # env.bool("DJANGO_SECURE_SSL_REDIRECT", default=True)
 print("SECURE_SSL_REDIRECT={}".format(SECURE_SSL_REDIRECT))
 # SECURE_HSTS_SECONDS = 0
 # SECURE_HSTS_INCLUDE_SUBDOMAINS = False
@@ -241,7 +242,7 @@ SECURE_HSTS_SECONDS = env.int("DJANGO_SECURE_HSTS_SECONDS", default=2592000)
 SECURE_HSTS_INCLUDE_SUBDOMAINS=env.bool("DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS", default=True)
 SECURE_HSTS_PRELOAD = env.bool("DJANGO_SECURE_HSTS_PRELOAD", default=True)
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-SESSION_COOKIE_SECURE = True #env.bool("DJANGO_SESSION_COOKIE_SECURE", default=True)
+SESSION_COOKIE_SECURE = True   # env.bool("DJANGO_SESSION_COOKIE_SECURE", default=True)
 CSRF_COOKIE_SECURE = True # env.bool("DJANGO_CSRF_COOKIE_SECURE", default=True)
 
 print("SESSION_COOKIE_SECURE={}".format(SESSION_COOKIE_SECURE))

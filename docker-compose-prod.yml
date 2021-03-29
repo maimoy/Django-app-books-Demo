@@ -3,18 +3,21 @@ version: '3.8'
 services:
   web:
     build: .
-    command: python /code/manage.py runserver_plus 0.0.0.0:8000 --insecure --cert /tmp/cert
+    command: ./runner.sh
     volumes:
       - .:/code
     ports:
+      - 443:443
       - 3000:3000
       - 8000:8000
+      - 8001:8001
+      - 8080:8080
       - 8010:8010
       - 9191:9191
     depends_on:
       - db
     environment:
-      - "DJANGO_SECRET_KEY=YF9ZnHgdqwmVRWXXgK_fY-s4uxSee4kRF83SB1Gtz9s"
+      - "DJANGO_SECRET_KEY=9j2p-v+e(wl7&de+3(73*$$z0fv_&0_(7$$-95(^obmd4v#mb_u3"
       - "DJANGO_DEBUG=False"
       - "VSCODE_DEBUGGER=False"
 

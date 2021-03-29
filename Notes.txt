@@ -1,0 +1,12 @@
+Working tested with http ang nginx
+
+uwsgi --socket "0.0.0.0:8001" --chdir /code/ --plugin-dir /usr/lib/uwsgi/plugins --plugin python3  --wsgi-file config/wsgi.py --uid 1000  --master --processes 4 --threads 2 --static-map /static=/code/static --static-map /media=/code/media --offload-threads 2 --py-autoreload 10 --stats 127.0.0.1:8010
+
+command to restart nginx
+/etc/init.d/nginx start
+
+copy nginx.conf to sites available
+cp /code/config/mysite_nginx.conf /etc/nginx/sites-available/mysite_nginx.conf
+
+shortcut to nginx sites-enabled
+ln -s /code/config/mysite_nginx.conf /etc/nginx/sites-enabled/mysite_nginx.conf
