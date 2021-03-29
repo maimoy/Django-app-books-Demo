@@ -12,10 +12,12 @@
 apt-get update
 apt-get install uwsgi-plugin-python3 -y
 apt-get install nginx -y
-cp /code/config/mysite_nginx.conf /etc/nginx/sites-available/mysite_nginx.conf
+cp /code/config/mysite2_nginx.conf /etc/nginx/sites-available/mysite_nginx.conf
 rm /etc/nginx/sites-enabled/mysite_nginx.conf
-ln -s /code/config/mysite_nginx.conf /etc/nginx/sites-enabled/mysite_nginx.conf
+ln -s /code/config/mysite2_nginx.conf /etc/nginx/sites-enabled/mysite_nginx.conf
+/etc/init.d/nginx restart
 
-# uwsgi --socket "0.0.0.0:8001" --chdir /code/ --plugin-dir /usr/lib/uwsgi/plugins --plugin python3  --wsgi-file config/wsgi.py --uid 1000  --master --processes 4 --threads 2 --static-map /static=/code/static --static-map /media=/code/media --offload-threads 2 --py-autoreload 10 --stats 127.0.0.1:8010
-tail -f /dev/null
+
+uwsgi --socket "0.0.0.0:8001" --chdir /code/ --plugin-dir /usr/lib/uwsgi/plugins --plugin python3  --wsgi-file config/wsgi.py --uid 1000  --master --processes 4 --threads 2 --static-map /static=/code/static --static-map /media=/code/media --offload-threads 2 --py-autoreload 10 --stats 127.0.0.1:8010
+#tail -f /dev/null
 
